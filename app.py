@@ -10,6 +10,7 @@ from autogen_agentchat.messages import BaseAgentEvent, BaseChatMessage
 from autogen_agentchat.teams import SelectorGroupChat
 from autogen_agentchat.messages import ChatMessage, TextMessage
 from autogen_agentchat.teams import DiGraphBuilder, GraphFlow
+from autogen_ext.tools.mcp import McpWorkbench, StdioServerParams
 from openai import AzureOpenAI
 import os
 import streamlit as st
@@ -115,6 +116,7 @@ async def sa_assist():
             sa_business_agent: Provide business requirements and insights.
             sa_architect_agent: Create architectural designs and oversee implementation. Also create architectural diagrams.
             sa_analyst_agent: Provides SWOT, TOWS Matrix, PESTLE, Porter’s Five Forces,SOAR Analysis, VRIO Framework , SCORE Analysis, NOISE Analysis.
+            mcp_fetch_agent: Fetch relevant Microsoft Learn content based on the architecture and provide relevant information.
 
         You only plan and delegate tasks - you do not execute them yourself.
 
@@ -140,7 +142,9 @@ async def sa_assist():
         description="An agent for architectural tasks, this agent should be the third to engage when given a new task.",
         model_client=model_client,
         system_message="""
-        You are an architectural agent.
+        You are an architectural agent. Create the architecture based on Azure PaaS services with AI first design.
+        Provide Secure by Design principles and best practices.
+        Provide architectural diagrams and design documents.
         Your job is to design and oversee the implementation of technical solutions.
         """,
     )
@@ -155,6 +159,17 @@ async def sa_assist():
         You are an analyst agent.
         Your job is to analyze data and provide insights.
         """,
+    )
+
+    # Get the fetch tool from mcp-server-fetch.
+    fetch_mcp_server = StdioServerParams(command="uvx", args=["https://learn.microsoft.com/api/mcp"])
+    sa_mslearn_doc = McpWorkbench(fetch_mcp_server)
+    # Create an agent that can use the fetch tool.
+    mcp_fetch_agent = AssistantAgent(
+        name="mcp_fetcher", model_client=model_client, workbench=sa_mslearn_doc, reflect_on_tool_use=True,
+        system_message="""
+        You are a Microsoft Learn content agent. Use the current content based on the architecture and provide relevant information.
+        """
     )
 
     # create a selectorgroup chat for courses here
@@ -174,7 +189,7 @@ async def sa_assist():
     Only select one agent.
     """
     team = SelectorGroupChat(
-        [planning_agent, sa_business_agent, sa_architect_agent, sa_analyst_agent],
+        [planning_agent, sa_business_agent, sa_architect_agent, sa_analyst_agent, mcp_fetch_agent],
         model_client=model_client,
         termination_condition=termination,
         selector_prompt=selector_prompt,
