@@ -180,6 +180,24 @@ async def sa_assist():
         selector_prompt=selector_prompt,
         allow_repeated_speaker=True,  # Allow an agent to speak multiple turns in a row.
     )
+    # Create the final reviewer agent
+    final_reviewer = AssistantAgent(
+        "final_reviewer",
+        model_client=model_client,
+        system_message="Consolidate the course information and summarize.",
+    )
+
+    # Build the workflow graph
+    learner_agent_graph = DiGraphBuilder()
+    learner_agent_graph.add_node(planning_agent).add_node(sa_business_agent).add_node(sa_architect_agent).add_node(sa_analyst_agent).add_node(final_reviewer)
+    # Fan-out from writer to editor1 and editor2
+    learner_agent_graph.add_edge(planning_agent, sa_business_agent)
+    learner_agent_graph.add_edge(planning_agent, sa_architect_agent)
+    learner_agent_graph.add_edge(planning_agent, sa_analyst_agent)
+    # Fan-in both editors into final reviewer
+    learner_agent_graph.add_edge(sa_business_agent, final_reviewer)
+    learner_agent_graph.add_edge(sa_architect_agent, final_reviewer)
+    learner_agent_graph.add_edge(sa_analyst_agent, final_reviewer)
 
     task = "Create a Email agent to read my email and prioritize messages?"
     # Initialize session state for chat history
@@ -204,6 +222,16 @@ async def sa_assist():
                 # If this is an assistant message and has an audio file, display it
                 if message["role"] == "assistant" and "audio_file" in message:
                     st.audio(message["audio_file"], format="audio/mp3")
+
+    # Build and validate the graph
+    graph = learner_agent_graph.build()
+
+    # Create the flow
+    flow = GraphFlow(
+        participants=learner_agent_graph.get_participants(),
+        graph=graph,
+    )
+
 
     # Input methods section
     st.markdown("---")
@@ -241,6 +269,7 @@ async def sa_assist():
                 with st.spinner("🤖 Processing your request..."):
                     # Use the same team workflow as text input for consistency
                     result = await Console(team.run_stream(task=transcriptiontext))
+                    # result = await Console(flow.run_stream(task=transcriptiontext))
                     last_message = None
                     for message in result.messages:
                         if hasattr(message, 'content') and message.content:
