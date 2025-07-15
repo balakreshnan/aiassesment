@@ -94,6 +94,15 @@ def generate_audio_response_gpt_1(text, selected_voice):
     return temp_file
 
 async def sa_assist():
+
+        # Configure Streamlit page with Material Design 3 theme
+    st.set_page_config(
+        page_title="Solution Architect Assist",
+        page_icon="🤖",
+        layout="wide",
+        initial_sidebar_state="expanded"
+    )
+
     # Create a system for Solution Architect to interact and get information
     planning_agent = AssistantAgent(
         "PlanningAgent",
