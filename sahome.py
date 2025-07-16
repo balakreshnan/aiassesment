@@ -1,6 +1,7 @@
 import io
 import tempfile
 import uuid
+import datetime
 from autogen_agentchat.ui import Console
 from autogen_ext.models.openai import AzureOpenAIChatCompletionClient
 from typing import List, Sequence
@@ -221,17 +222,37 @@ async def sa_assist():
     # Initialize session state to track if we're currently processing
     if "processing" not in st.session_state:
         st.session_state.processing = False
+    
+    # Initialize session state to track agent outputs
+    if "agent_outputs" not in st.session_state:
+        st.session_state.agent_outputs = []
 
-    # Create a scrollable container for chat history
-    chat_container = st.container(height=400)
-    with chat_container:
-        # Display chat history
-        for message in st.session_state.messages:
-            with st.chat_message(message["role"]):
-                st.markdown(message["content"])
-                # If this is an assistant message and has an audio file, display it
-                if message["role"] == "assistant" and "audio_file" in message:
-                    st.audio(message["audio_file"], format="audio/mp3")
+    # Create two columns with 2:1 ratio
+    col_main, col_agent = st.columns([2, 1])
+    
+    with col_main:
+        st.markdown("### 💬 Chat History")
+        # Create a scrollable container for chat history
+        chat_container = st.container(height=400)
+        with chat_container:
+            # Display chat history
+            for message in st.session_state.messages:
+                with st.chat_message(message["role"]):
+                    st.markdown(message["content"])
+                    # If this is an assistant message and has an audio file, display it
+                    if message["role"] == "assistant" and "audio_file" in message:
+                        st.audio(message["audio_file"], format="audio/mp3")
+    
+    with col_agent:
+        st.markdown("### 🤖 Agent Outputs")
+        # Create a scrollable container for agent outputs
+        agent_container = st.container(height=400)
+        with agent_container:
+            # Display agent outputs history
+            for output in st.session_state.agent_outputs:
+                with st.expander(f"🎯 {output['source']}", expanded=False):
+                    st.markdown(output['content'])
+                    st.caption(f"Time: {output['timestamp']}")
 
     # Build and validate the graph
     graph = learner_agent_graph.build()
@@ -296,8 +317,22 @@ async def sa_assist():
                             content = message.content
                             print(f"[{source}]: {content}")
                             last_message = content
+                            
+                            # Store agent output in session state
+                            st.session_state.agent_outputs.append({
+                                'source': source,
+                                'content': content,
+                                'timestamp': datetime.datetime.now().strftime("%H:%M:%S")
+                            })
                         else:
                             print(f"[{source}]: {message}")
+                            
+                            # Store raw message in session state
+                            st.session_state.agent_outputs.append({
+                                'source': source,
+                                'content': str(message),
+                                'timestamp': datetime.datetime.now().strftime("%H:%M:%S")
+                            })
                 
                 if last_message:
                     with st.spinner("🔊 Generating audio response...", show_time=True):
@@ -334,8 +369,22 @@ async def sa_assist():
                     content = message.content
                     print(f"[{source}]: {content}")
                     last_message = content
+                    
+                    # Store agent output in session state
+                    st.session_state.agent_outputs.append({
+                        'source': source,
+                        'content': content,
+                        'timestamp': datetime.datetime.now().strftime("%H:%M:%S")
+                    })
                 else:
                     print(f"[{source}]: {message}")
+                    
+                    # Store raw message in session state
+                    st.session_state.agent_outputs.append({
+                        'source': source,
+                        'content': str(message),
+                        'timestamp': datetime.datetime.now().strftime("%H:%M:%S")
+                    })
 
         # Add assistant response to chat history and generate audio
         if last_message:
@@ -351,6 +400,7 @@ async def sa_assist():
         st.session_state.messages = []
         st.session_state.processed_audio = set()  # Clear processed audio tracking
         st.session_state.processing = False  # Reset processing state
+        st.session_state.agent_outputs = []  # Clear agent outputs
         st.rerun()
 
 if __name__ == "__main__":
