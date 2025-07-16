@@ -31,12 +31,12 @@ nav_option = st.sidebar.selectbox("Navigation", ["Home",
 
 # Display the selected page
 if nav_option == "Home":
-    sa_assist()
+    asyncio.run(sa_assist())
 elif nav_option == "Solution Architect Assists":
-    sa_assist()
+    asyncio.run(sa_assist())
 elif nav_option == "Fine-tune Assesment":
     finetuneassesment()
 elif nav_option == "AI Assesment":
     assesmentmain()
 else:
-    sa_assist()
+    asyncio.run(sa_assist())

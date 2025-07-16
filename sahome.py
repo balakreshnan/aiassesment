@@ -96,6 +96,7 @@ def generate_audio_response_gpt_1(text, selected_voice):
 
 async def sa_assist():
 
+    st.title("Solution Architect Assistant 🤖")
 
     # Create a system for Solution Architect to interact and get information
     planning_agent = AssistantAgent(
@@ -187,6 +188,7 @@ async def sa_assist():
         termination_condition=termination,
         selector_prompt=selector_prompt,
         allow_repeated_speaker=True,  # Allow an agent to speak multiple turns in a row.
+        max_turns=12,  # Limit the number of turns in the conversation.
     )
     # Create the final reviewer agent
     final_reviewer = AssistantAgent(
@@ -255,7 +257,7 @@ async def sa_assist():
     
     with col2:
         st.markdown("**⌨️ Text Input**")
-        prompt = st.chat_input("Type your message here or use voice recording above...")
+        prompt = st.chat_input("Create a agent to read my email and prioritize messages?")
 
     # Process audio input
     if audio_data and not st.session_state.processing:
@@ -267,24 +269,38 @@ async def sa_assist():
             st.session_state.processing = True
             st.session_state.processed_audio.add(audio_id)
             
-            with st.spinner("🎤 Transcribing audio..."):
+            with st.spinner("🎤 Transcribing audio...", show_time=True):
                 transcriptiontext = transcribe_audio(audio_data)
             
             if transcriptiontext:
                 # Add the transcribed text to chat history
                 st.session_state.messages.append({"role": "user", "content": f"🎤 {transcriptiontext}"})
                 
-                with st.spinner("🤖 Processing your request..."):
+                with st.spinner("🤖 Processing your request...", show_time=True):
                     # Use the same team workflow as text input for consistency
-                    result = await Console(team.run_stream(task=transcriptiontext))
-                    # result = await Console(flow.run_stream(task=transcriptiontext))
                     last_message = None
-                    for message in result.messages:
-                        if hasattr(message, 'content') and message.content:
-                            last_message = message.content
+                    async for message in team.run_stream(task=transcriptiontext):
+                        # Display the message in console for debugging
+                        print(f"Message type: {type(message)}")
+                        print(f"Message attributes: {dir(message)}")
+                        
+                        # Try to extract source and content safely
+                        if hasattr(message, 'source'):
+                            source = message.source
+                        elif hasattr(message, 'agent_name'):
+                            source = message.agent_name
+                        else:
+                            source = "Unknown"
+                            
+                        if hasattr(message, 'content'):
+                            content = message.content
+                            print(f"[{source}]: {content}")
+                            last_message = content
+                        else:
+                            print(f"[{source}]: {message}")
                 
                 if last_message:
-                    with st.spinner("🔊 Generating audio response..."):
+                    with st.spinner("🔊 Generating audio response...", show_time=True):
                         audio_file = generate_audio_response_gpt_1(last_message, "coral")
                     st.session_state.messages.append({"role": "assistant", "content": last_message, "audio_file": audio_file})
             
@@ -300,13 +316,26 @@ async def sa_assist():
         
         with st.spinner("🤖 Processing your request..."):
             # Generate assistant response using the team workflow
-            result = await Console(team.run_stream(task=prompt))
-            
-            # Parse the output to get the last summarized message
             last_message = None
-            for message in result.messages:
-                if hasattr(message, 'content') and message.content:
-                    last_message = message.content
+            async for message in team.run_stream(task=prompt):
+                # Display the message in console for debugging
+                print(f"Message type: {type(message)}")
+                print(f"Message attributes: {dir(message)}")
+                
+                # Try to extract source and content safely
+                if hasattr(message, 'source'):
+                    source = message.source
+                elif hasattr(message, 'agent_name'):
+                    source = message.agent_name
+                else:
+                    source = "Unknown"
+                    
+                if hasattr(message, 'content'):
+                    content = message.content
+                    print(f"[{source}]: {content}")
+                    last_message = content
+                else:
+                    print(f"[{source}]: {message}")
 
         # Add assistant response to chat history and generate audio
         if last_message:
