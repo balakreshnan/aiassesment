@@ -1,0 +1,219 @@
+{
+    "sections": [
+        {
+            "name": "AI Readiness",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "Is there a clearly defined problem or task that AI could address?",
+                    "type": "boolean",
+                    "options": ["Yes", "No"],
+                    "next": {"Yes": "q2", "No": "stop"}
+                },
+                {
+                    "id": "q2",
+                    "text": "Is there sufficient data available to train or fine-tune an AI model?",
+                    "type": "boolean",
+                    "options": ["Yes", "No"],
+                    "next": {"Yes": "q3", "No": "stop"}
+                },
+                {
+                    "id": "q3",
+                    "text": "Is the data of high quality (e.g., clean, relevant, and representative)?",
+                    "type": "boolean",
+                    "options": ["Yes", "No"],
+                    "next": {"Yes": "q4", "No": "stop"}
+                },
+                {
+                    "id": "q4",
+                    "text": "Are there computational resources available to support AI model training or deployment?",
+                    "type": "boolean",
+                    "options": ["Yes", "No"],
+                    "next": {"Yes": "q5", "No": "stop"}
+                }
+            ]
+        },
+        {
+            "name": "Generative AI Applicability",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "Does the use case involve generating content (e.g., text, images)?",
+                    "type": "boolean",
+                    "options": ["Yes", "No"],
+                    "next": {"Yes": "q6", "No": "stop"}
+                },
+                {
+                    "id": "q6",
+                    "text": "Is the generated output expected to be contextually relevant and domain-specific?",
+                    "type": "boolean",
+                    "options": ["Yes", "No"],
+                    "next": {"Yes": "q7", "No": "stop"}
+                },
+                {
+                    "id": "q7",
+                    "text": "Is there domain-specific data available to customize the generative AI model?",
+                    "type": "boolean",
+                    "options": ["Yes", "No"],
+                    "next": {"Yes": "q8", "No": "stop"}
+                }
+            ]
+        },
+        {
+            "name": "Retrieval-Augmented Generation (RAG) Applicability",
+            "questions": [
+                {
+                    "id": "q8",
+                    "text": "Does the use case require retrieving information from a specific knowledge base during generation?",
+                    "type": "boolean",
+                    "options": ["Yes", "No"],
+                    "next": {"Yes": "q9", "No": "q11"}
+                },
+                {
+                    "id": "q9",
+                    "text": "Is there a structured or semi-structured knowledge base available for retrieval?",
+                    "type": "boolean",
+                    "options": ["Yes", "No"],
+                    "next": {"Yes": "q10", "No": "stop"}
+                },
+                {
+                    "id": "q10",
+                    "text": "Does the use case benefit from combining retrieved information with generated outputs?",
+                    "type": "boolean",
+                    "options": ["Yes", "No"],
+                    "next": {"Yes": "q17", "No": "q11"}
+                }
+            ]
+        },
+        {
+            "name": "Tabular Data in Generative AI",
+            "questions": [
+                {
+                    "id": "q11",
+                    "text": "Does the use case involve structured tabular data as a primary input or output?",
+                    "type": "boolean",
+                    "options": ["Yes", "No"],
+                    "next": {"Yes": "q12", "No": "q14"}
+                },
+                {
+                    "id": "q12",
+                    "text": "Can the tabular data be converted into a format suitable for generative AI?",
+                    "type": "boolean",
+                    "options": ["Yes", "No"],
+                    "next": {"Yes": "q13", "No": "stop"}
+                },
+                {
+                    "id": "q13",
+                    "text": "Does the use case require generating insights or summaries from tabular data?",
+                    "type": "boolean",
+                    "options": ["Yes", "No"],
+                    "next": {"Yes": "q17", "No": "stop"}
+                }
+            ]
+        },
+        {
+            "name": "Agentic AI Applicability",
+            "questions": [
+                {
+                    "id": "q14",
+                    "text": "Does the use case require the AI to autonomously perform tasks or interact with external systems?",
+                    "type": "boolean",
+                    "options": ["Yes", "No"],
+                    "next": {"Yes": "q15", "No": "q17"}
+                },
+                {
+                    "id": "q15",
+                    "text": "Are there clear workflows or decision-making processes for the AI to follow?",
+                    "type": "boolean",
+                    "options": ["Yes", "No"],
+                    "next": {"Yes": "q16", "No": "stop"}
+                },
+                {
+                    "id": "q16",
+                    "text": "Does the use case benefit from the AI reasoning through multiple steps or dynamic environments?",
+                    "type": "boolean",
+                    "options": ["Yes", "No"],
+                    "next": {"Yes": "q17", "No": "stop"}
+                }
+            ]
+        },
+        {
+            "name": "Dataset Creation for Fine-Tuning",
+            "questions": [
+                {
+                    "id": "q17",
+                    "text": "Can a dataset be created or curated with task-specific examples for fine-tuning (e.g., thousands of text samples)?",
+                    "type": "boolean",
+                    "options": ["Yes", "No"],
+                    "next": {"Yes": "q18", "No": "stop"}
+                },
+                {
+                    "id": "q18",
+                    "text": "Is there a process in place to annotate or label the dataset for fine-tuning (e.g., human annotators, automated tools)?",
+                    "type": "boolean",
+                    "options": ["Yes", "No"],
+                    "next": {"Yes": "q19", "No": "stop"}
+                },
+                {
+                    "id": "q19",
+                    "text": "Can the dataset be split into training, validation, and test sets to ensure robust model performance?",
+                    "type": "boolean",
+                    "options": ["Yes", "No"],
+                    "next": {"Yes": "q20", "No": "stop"}
+                }
+            ]
+        },
+        {
+            "name": "Subject Matter Expertise and Compliance",
+            "questions": [
+                {
+                    "id": "q20",
+                    "text": "Are subject matter experts (SMEs) available to validate the dataset for accuracy and relevance?",
+                    "type": "boolean",
+                    "options": ["Yes", "No"],
+                    "next": {"Yes": "q21", "No": "stop"}
+                },
+                {
+                    "id": "q21",
+                    "text": "Do the SMEs have expertise in the domain-specific requirements of the use case?",
+                    "type": "boolean",
+                    "options": ["Yes", "No"],
+                    "next": {"Yes": "q22", "No": "stop"}
+                },
+                {
+                    "id": "q22",
+                    "text": "Is there a process to ensure the dataset complies with company policies, legal, and regulatory requirements (e.g., GDPR, HIPAA)?",
+                    "type": "boolean",
+                    "options": ["Yes", "No"],
+                    "next": {"Yes": "q23", "No": "stop"}
+                }
+            ]
+        },
+        {
+            "name": "Fine-Tuning Applicability",
+            "questions": [
+                {
+                    "id": "q23",
+                    "text": "Does the use case require highly customized outputs that a general-purpose model cannot achieve?",
+                    "type": "boolean",
+                    "options": ["Yes", "No"],
+                    "next": {"Yes": "q24", "No": "stop"}
+                },
+                {
+                    "id": "q24",
+                    "text": "Are there measurable performance metrics to evaluate the fine-tuned model’s effectiveness?",
+                    "type": "boolean",
+                    "options": ["Yes", "No"],
+                    "next": {"Yes": "q25", "No": "stop"}
+                },
+                {
+                    "id": "q25",
+                    "text": "Which AI approaches are applicable to the use case?",
+                    "type": "multiple_choice",
+                    "options": ["Generative AI", "RAG", "Tabular Data", "Agentic AI"],
+                    "next": {"Any": "end"}
+                }
+            ]
+        }
+    ]
+}

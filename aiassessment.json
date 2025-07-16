@@ -1,0 +1,99 @@
+[
+  {
+    "name": "Strategy & Governance",
+    "weight": 0.2,
+    "questions": [
+      {"text": "Does the organization have a documented AI strategy?", "desc": "1 = No, 5 = Yes, with clear goals and alignment."},
+      {"text": "Are AI initiatives aligned with business objectives?", "desc": "1 = No alignment, 5 = Fully aligned."},
+      {"text": "Is there a cross-functional team or AI governance framework in place?", "desc": "1 = No, 5 = Yes, well established."},
+      {"text": "Does the organization have a process to identify and prioritize AI use cases?", "desc": "1 = No process, 5 = Well-defined and ongoing process."},
+      {"text": "How effective is the organization at finding new AI use cases across departments?", "desc": "1 = Not effective, 5 = Highly effective and systematic."}
+    ]
+  },
+  {
+    "name": "Data & Infrastructure",
+    "weight": 0.15,
+    "questions": [
+      {"text": "How would you rate the quality of your data for AI use cases?", "desc": "1 = Poor, 5 = High-quality and relevant."},
+      {"text": "Are data pipelines and infrastructure in place to support AI workloads?", "desc": "1 = No, 5 = Fully in place."},
+      {"text": "Are data governance policies in place?", "desc": "1 = No, 5 = Yes, with clear compliance."},
+      {"text": "How well does the organization evaluate existing AI tools and platforms before adoption?", "desc": "1 = No evaluation, 5 = Rigorous and ongoing evaluation."},
+      {"text": "How does the organization decide what AI solutions to build vs. buy?", "desc": "1 = No clear process, 5 = Well-defined evaluation and decision process."}
+    ]
+  },
+  {
+    "name": "Technology & Tools",
+    "weight": 0.15,
+    "questions": [
+      {"text": "Are AI/ML tools and platforms being used?", "desc": "1 = No, 5 = Advanced tools in production."},
+      {"text": "Are AI models currently deployed?", "desc": "1 = No, 5 = Multiple models in production."},
+      {"text": "Is the organization leveraging cloud-based AI services or building custom solutions?", "desc": "1 = No, 5 = Both."}
+    ]
+  },
+  {
+    "name": "Skills & Culture",
+    "weight": 0.15,
+    "questions": [
+      {"text": "How would you rate the AI/ML skills of your team?", "desc": "1 = No expertise, 5 = Advanced skills."},
+      {"text": "Is there a culture of innovation around AI?", "desc": "1 = No, 5 = Strong culture of experimentation."},
+      {"text": "Are stakeholders aware of AI's potential and limitations?", "desc": "1 = No, 5 = Yes, well informed."},
+      {"text": "How would you rate the AI/ML knowledge and awareness among executives?", "desc": "1 = Very limited, 5 = Highly knowledgeable and engaged."},
+      {"text": "How effective are your skilling/upskilling programs for executives and business leaders?", "desc": "1 = No programs, 5 = Comprehensive and ongoing."},
+      {"text": "How would you rate the overall AI literacy in your organization?", "desc": "1 = Very low, 5 = High across all levels."}
+    ]
+  },
+  {
+    "name": "Results & Impact",
+    "weight": 0.2,
+    "questions": [
+      {"text": "What business outcomes have been achieved through AI?", "desc": "1 = No outcomes, 5 = Significant outcomes."},
+      {"text": "Are AI initiatives generating measurable ROI?", "desc": "1 = No, 5 = High ROI."},
+      {"text": "Are there measurable KPIs for AI initiatives?", "desc": "1 = No, 5 = Yes, tracked and reported."}
+    ]
+  },
+  {
+    "name": "Responsible AI & Trustworthiness",
+    "weight": 0.15,
+    "questions": [
+      {"text": "Are AI systems being monitored for bias?", "desc": "1 = No, 5 = Yes, with regular audits."},
+      {"text": "Are AI initiatives compliant with regulations?", "desc": "1 = No, 5 = Fully compliant."},
+      {"text": "Are there policies for AI fairness, transparency, and accountability?", "desc": "1 = No, 5 = Yes, well established."}
+    ]
+  },
+  {
+    "name": "Generative AI Use Cases",
+    "weight": 0.1,
+    "questions": [
+      {"text": "Is the organization exploring or implementing generative AI for content creation (e.g., text, images, or code)?", "desc": "1 = No, 5 = Actively implemented with measurable outcomes."},
+      {"text": "How effective is the organization at identifying generative AI use cases (e.g., chatbots, automated reports, or creative content)?", "desc": "1 = Not effective, 5 = Highly effective with clear use cases."},
+      {"text": "Are there processes to evaluate the quality and ethical implications of generative AI outputs?", "desc": "1 = No process, 5 = Robust evaluation and ethical guidelines in place."}
+    ]
+  },
+  {
+    "name": "Vision-Based Use Cases",
+    "weight": 0.1,
+    "questions": [
+      {"text": "Is the organization utilizing vision-based AI for tasks like image recognition, object detection, or video analysis?", "desc": "1 = No, 5 = Actively deployed with strong results."},
+      {"text": "How well does the organization identify opportunities for vision-based AI applications (e.g., quality control, surveillance, or medical imaging)?", "desc": "1 = No process, 5 = Systematic identification process."},
+      {"text": "Are there sufficient data and infrastructure to support vision-based AI models?", "desc": "1 = No, 5 = Fully equipped with high-quality data and infrastructure."}
+    ]
+  },
+  {
+    "name": "Traditional Deep Learning & ML Use Cases",
+    "weight": 0.1,
+    "questions": [
+      {"text": "Is the organization implementing traditional ML or deep learning models for tasks like predictive analytics, classification, or regression?", "desc": "1 = No, 5 = Actively deployed with measurable success."},
+      {"text": "How effective is the organization at identifying traditional ML use cases (e.g., customer segmentation, fraud detection, or demand forecasting)?", "desc": "1 = Not effective, 5 = Highly effective with clear use cases."},
+      {"text": "Are there adequate tools and expertise to develop and maintain traditional ML models?", "desc": "1 = No, 5 = Advanced tools and skilled teams in place."}
+    ]
+  },
+  {
+    "name": "Audio-Based Use Cases",
+    "weight": 0.1,
+    "questions": [
+      {"text": "Is the organization leveraging audio-based AI for applications like speech recognition, voice assistants, or audio analysis?", "desc": "1 = No, 5 = Actively deployed with strong outcomes."},
+      {"text": "How effective is the organization at identifying audio-based AI use cases (e.g., call center analytics, voice authentication, or audio event detection)?", "desc": "1 = Not effective, 5 = Highly effective with clear use cases."},
+      {"text": "Are there sufficient data and infrastructure to support audio-based AI models?", "desc": "1 = No, 5 = Fully equipped with high-quality data and infrastructure."}
+    ]
+  }
+]
