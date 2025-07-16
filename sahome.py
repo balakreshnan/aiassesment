@@ -190,7 +190,7 @@ async def sa_assist():
         selector_prompt=selector_prompt,
         allow_repeated_speaker=True,  # Allow an agent to speak multiple turns in a row.
         # max_turns=12,  # Limit the number of turns in the conversation.
-        termination_condition=text_mention_termination | max_messages_termination,
+        termination_condition=termination,
         max_turns=20,  # Limit the number of turns in the conversation.
     )
     # Create the final reviewer agent
