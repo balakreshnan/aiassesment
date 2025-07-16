@@ -5,3 +5,4 @@ autogen-agentchat
 autogen-ext
 autogen-ext[openai,azure,mcp]
 streamlit
+plotly.express
