@@ -31,7 +31,7 @@ CHAT_DEPLOYMENT_NAME = os.getenv("AZURE_OPENAI_DEPLOYMENT")
 client = AzureOpenAI(
     azure_endpoint=AZURE_ENDPOINT,
     api_key=AZURE_API_KEY,
-    api_version="2024-06-01"  # Adjust API version as needed
+    api_version="2024-10-21"  # Adjust API version as needed
 )
 
 # --- Load Assessment Configuration from JSON ---
@@ -55,7 +55,7 @@ def aoai_callback(query: str) -> str:
     client = AzureOpenAI(
     azure_endpoint = os.getenv("AZURE_OPENAI_ENDPOINT"), 
     api_key=os.getenv("AZURE_OPENAI_KEY"),  
-    api_version="2024-12-01-preview",
+    api_version="2024-10-21",
     )
     system_prompt = (
         """You are a AI Assesment assistant, Process the user query and provide a detailed response.
@@ -70,7 +70,7 @@ def aoai_callback(query: str) -> str:
         {"role": "system", "content": system_prompt},
         {"role": "user", "content": query}
         ]
-    model_name = os.getenv("MODEL_DEPLOYMENT_NAME")
+    model_name = os.getenv("AZURE_OPENAI_DEPLOYMENT")
     # model_name_reasoning = "o3"
 
     response = client.chat.completions.create(

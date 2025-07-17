@@ -16,7 +16,7 @@ CHAT_DEPLOYMENT_NAME = os.getenv("AZURE_OPENAI_DEPLOYMENT", "gpt-4.1")
 client = AzureOpenAI(
     azure_endpoint=AZURE_ENDPOINT,
     api_key=AZURE_API_KEY,
-    api_version="2024-06-01"
+    api_version="2024-10-21"
 )
 
 # Load the JSON questionnaire

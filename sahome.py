@@ -30,7 +30,8 @@ WHISPER_DEPLOYMENT_NAME = "whisper"
 client = AzureOpenAI(
     azure_endpoint=endpoint,
     api_key=api_key,
-    api_version="2024-06-01"  # Adjust API version as needed
+    # api_version="2024-06-01"  # Adjust API version as needed
+    api_version="2024-10-21",  # Adjust API version as needed
 )
 # Define a model client. You can use other model client that implements
 # the `ChatCompletionClient` interface.
@@ -40,8 +41,9 @@ model_client = AzureOpenAIChatCompletionClient(
     azure_endpoint=endpoint,
     deployment_name=model_deployment_name,
     api_version="2024-10-21",  # Specify the API version if needed.
-    seed=42,  # Optional: Set a seed for reproducibility.
-    temperature=0.0,  # Optional: Set the temperature for the model (0.0 to 1.0, where 0.0 is deterministic and 1.0 is more random).
+    # api_version="2025-04-14",  # Specify the API version if needed.
+    # seed=42,  # Optional: Set a seed for reproducibility.
+    temperature=1.0,  # Optional: Set the temperature for the model (0.0 to 1.0, where 0.0 is deterministic and 1.0 is more random).
 )
 
 def transcribe_audio(audio_data) -> str:
@@ -167,6 +169,13 @@ async def sa_assist():
         """
     )
 
+    # Create the final reviewer agent
+    final_reviewer = AssistantAgent(
+        "final_reviewer",
+        model_client=model_client,
+        system_message="Consolidate all the agent outputs. Summarize the findings and end with 'TERMINATE'.",
+    )
+
     # create a selectorgroup chat for courses here
     text_mention_termination = TextMentionTermination("TERMINATE")
     max_messages_termination = MaxMessageTermination(max_messages=25)
@@ -184,21 +193,16 @@ async def sa_assist():
     Only select one agent.
     """
     team = SelectorGroupChat(
-        [planning_agent, sa_business_agent, sa_architect_agent, sa_analyst_agent, mcp_fetch_agent],
+        [planning_agent, sa_business_agent, sa_architect_agent, sa_analyst_agent, final_reviewer],
         model_client=model_client,
         termination_condition=termination,
         selector_prompt=selector_prompt,
         allow_repeated_speaker=True,  # Allow an agent to speak multiple turns in a row.
         # max_turns=12,  # Limit the number of turns in the conversation.
-        termination_condition=termination,
+        # termination_condition=termination,
         max_turns=20,  # Limit the number of turns in the conversation.
     )
-    # Create the final reviewer agent
-    final_reviewer = AssistantAgent(
-        "final_reviewer",
-        model_client=model_client,
-        system_message="Consolidate the course information and summarize.",
-    )
+    
 
     # Build the workflow graph
     learner_agent_graph = DiGraphBuilder()
