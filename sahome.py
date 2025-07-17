@@ -159,8 +159,13 @@ async def sa_assist():
     )
 
     # Get the fetch tool from mcp-server-fetch.
-    fetch_mcp_server = StdioServerParams(command="uvx", args=["https://learn.microsoft.com/api/mcp"])
-    sa_mslearn_doc = McpWorkbench(fetch_mcp_server)
+    # fetch_mcp_server = StdioServerParams(command="uvx", args=["https://learn.microsoft.com/api/mcp"])
+    params = StdioServerParams(
+        command="uvx",
+        args=["https://learn.microsoft.com/api/mcp"],
+        read_timeout_seconds=60,
+    )
+    sa_mslearn_doc = McpWorkbench(server_params=params)
     # Create an agent that can use the fetch tool.
     mcp_fetch_agent = AssistantAgent(
         name="mcp_fetcher", model_client=model_client, workbench=sa_mslearn_doc, reflect_on_tool_use=True,
