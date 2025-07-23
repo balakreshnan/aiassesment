@@ -9,6 +9,7 @@ from sahome import sa_assist
 from stasses import assesmentmain
 from stfinetuneasses import finetuneassesment
 from stftagent import fine_tuning_pipeline_assistant
+from stbrainstorm import brainstorm_assistant
 
 from dotenv import load_dotenv
 
@@ -29,6 +30,7 @@ nav_option = st.sidebar.selectbox("Navigation", ["Home",
                                                 "AI Assesment",
                                                 "Fine-tune Assesment",
                                                 "FineTuning Assistant",
+                                                "BrainStorming Agent",
                                                 "About"])
 
 # Display the selected page
@@ -42,5 +44,7 @@ elif nav_option == "AI Assesment":
     assesmentmain()
 elif nav_option == "FineTuning Assistant":
     asyncio.run(fine_tuning_pipeline_assistant())
+elif nav_option == "BrainStorming Agent":
+    asyncio.run(brainstorm_assistant())
 else:
     asyncio.run(sa_assist())
