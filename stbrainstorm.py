@@ -15,7 +15,7 @@ from autogen_ext.tools.mcp import McpWorkbench, StdioServerParams
 from openai import AzureOpenAI
 import os
 import streamlit as st
-
+from azure.identity import DefaultAzureCredential, get_bearer_token_provider
 
 from dotenv import load_dotenv
 
@@ -27,16 +27,23 @@ model_deployment_name = os.environ["AZURE_OPENAI_DEPLOYMENT"]
 WHISPER_DEPLOYMENT_NAME = "whisper"
 
 # Initialize Azure OpenAI client
+token_provider = get_bearer_token_provider(
+    DefaultAzureCredential(),
+    "https://cognitiveservices.azure.com/.default"   # audience / scope for Azure OpenAI
+)
+
 client = AzureOpenAI(
     azure_endpoint=endpoint,
-    api_key=api_key,
+    # api_key=api_key,
+    azure_ad_token_provider=token_provider,  # Use Azure AD authentication
     api_version="2024-10-21",  # Adjust API version as needed
 )
 
 # Define a model client
 model_client = AzureOpenAIChatCompletionClient(
     model=model_deployment_name,
-    api_key=api_key,
+    # api_key=api_key,
+    azure_ad_token_provider=token_provider,
     azure_endpoint=endpoint,
     deployment_name=model_deployment_name,
     api_version="2024-10-21",
@@ -65,7 +72,8 @@ def generate_audio_response(text, selected_voice="coral"):
     try:
         audioclient = AzureOpenAI(
             azure_endpoint=endpoint,
-            api_key=api_key,
+            # api_key=api_key,
+            azure_ad_token_provider=token_provider,
             api_version="2025-03-01-preview"
         )
 

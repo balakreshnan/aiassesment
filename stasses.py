@@ -14,6 +14,7 @@ import json
 import numpy as np
 from datetime import datetime
 from typing import Any, Callable, Set, Dict, List, Optional
+from azure.identity import DefaultAzureCredential, get_bearer_token_provider
 
 
 from dotenv import load_dotenv
@@ -27,10 +28,17 @@ AZURE_API_KEY = os.getenv("AZURE_OPENAI_KEY")
 WHISPER_DEPLOYMENT_NAME = "whisper"
 CHAT_DEPLOYMENT_NAME = os.getenv("AZURE_OPENAI_DEPLOYMENT")
 
+# Create a token provider that gets fresh Entra ID tokens
+token_provider = get_bearer_token_provider(
+    DefaultAzureCredential(),
+    "https://cognitiveservices.azure.com/.default"   # audience / scope for Azure OpenAI
+)
+
 # Initialize Azure OpenAI client
 client = AzureOpenAI(
     azure_endpoint=AZURE_ENDPOINT,
-    api_key=AZURE_API_KEY,
+    #api_key=AZURE_API_KEY,
+    azure_ad_token_provider=token_provider,  # Use Azure AD authentication
     api_version="2024-10-21"  # Adjust API version as needed
 )
 
@@ -52,9 +60,15 @@ def aoai_callback(query: str) -> str:
     returntxt = ""
     excelsheetinfo = ""
 
+    token_provider = get_bearer_token_provider(
+        DefaultAzureCredential(),
+        "https://cognitiveservices.azure.com/.default"   # audience / scope for Azure OpenAI
+    )
+
     client = AzureOpenAI(
     azure_endpoint = os.getenv("AZURE_OPENAI_ENDPOINT"), 
-    api_key=os.getenv("AZURE_OPENAI_KEY"),  
+    #api_key=os.getenv("AZURE_OPENAI_KEY"),  
+    azure_ad_token_provider=token_provider,  # Use Azure AD authentication
     api_version="2024-10-21",
     )
     system_prompt = (
@@ -170,7 +184,7 @@ def assesmentmain():
             fig.add_shape(type="rect", x0=3, y0=3, x1=5, y1=5, line=dict(color="gray", width=1))
             fig.update_traces(marker=dict(line=dict(width=2, color='DarkSlateGrey')))
             fig.update_layout(showlegend=False)
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, width='stretch')
 
             # --- Results Table ---
             st.header("Step 3: Results & Recommendations")
@@ -182,7 +196,7 @@ def assesmentmain():
                     "Score (1-5)": [round(scores[dim["name"]], 2) for dim in DIMENSIONS],
                     "Weighted": [round(weighted_scores[dim["name"]], 2) for dim in DIMENSIONS],
                 })
-                st.dataframe(df, use_container_width=True)
+                st.dataframe(df, width='stretch')
 
             with col2:
                 st.markdown("### Quadrant & Recommendations")

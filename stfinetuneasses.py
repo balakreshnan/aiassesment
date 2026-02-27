@@ -2,6 +2,7 @@ import streamlit as st
 import json
 import os
 from openai import AzureOpenAI
+from azure.identity import DefaultAzureCredential, get_bearer_token_provider
 from dotenv import load_dotenv
 
 # Load environment variables
@@ -12,11 +13,17 @@ AZURE_ENDPOINT = os.getenv("AZURE_OPENAI_ENDPOINT")
 AZURE_API_KEY = os.getenv("AZURE_OPENAI_KEY")
 CHAT_DEPLOYMENT_NAME = os.getenv("AZURE_OPENAI_DEPLOYMENT", "gpt-4.1")
 
+token_provider = get_bearer_token_provider(
+    DefaultAzureCredential(),
+    "https://cognitiveservices.azure.com/.default"   # audience / scope for Azure OpenAI
+)
+
 # Initialize Azure OpenAI client
 client = AzureOpenAI(
     azure_endpoint=AZURE_ENDPOINT,
-    api_key=AZURE_API_KEY,
-    api_version="2024-10-21"
+    #api_key=AZURE_API_KEY,
+    azure_ad_token_provider=token_provider,  # Use Azure AD authentication
+    api_version="2024-10-21"  # Adjust API version as needed
 )
 
 # Load the JSON questionnaire
@@ -196,9 +203,10 @@ def get_ai_guidance(task_description, responses):
         Question: {prompt}
         """
         mcpclient = AzureOpenAI(  
-        base_url = os.getenv("AZURE_OPENAI_ENDPOINT") + "/openai/v1/",  
-        api_key= os.getenv("AZURE_OPENAI_KEY"),
-        api_version="preview"
+            base_url = os.getenv("AZURE_OPENAI_ENDPOINT") + "/openai/v1/",  
+            #api_key= os.getenv("AZURE_OPENAI_KEY"),
+            azure_ad_token_provider=token_provider,  # Use Azure AD authentication
+            api_version="preview"
         )
         response = mcpclient.responses.create(
             model=CHAT_DEPLOYMENT_NAME, # replace with your model deployment name 

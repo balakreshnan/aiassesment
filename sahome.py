@@ -15,6 +15,7 @@ from autogen_ext.tools.mcp import McpWorkbench, StdioServerParams
 from openai import AzureOpenAI
 import os
 import streamlit as st
+from azure.identity import DefaultAzureCredential, get_bearer_token_provider
 
 
 from dotenv import load_dotenv
@@ -27,17 +28,30 @@ model_deployment_name = os.environ["AZURE_OPENAI_DEPLOYMENT"]
 WHISPER_DEPLOYMENT_NAME = "whisper"
 
 # Initialize Azure OpenAI client
-client = AzureOpenAI(
-    azure_endpoint=endpoint,
-    api_key=api_key,
-    # api_version="2024-06-01"  # Adjust API version as needed
-    api_version="2024-10-21",  # Adjust API version as needed
+# client = AzureOpenAI(
+#     azure_endpoint=endpoint,
+#     api_key=api_key,
+#     # api_version="2024-06-01"  # Adjust API version as needed
+#     api_version="2024-10-21",  # Adjust API version as needed
+# )
+token_provider = get_bearer_token_provider(
+    DefaultAzureCredential(),
+    "https://cognitiveservices.azure.com/.default"   # audience / scope for Azure OpenAI
 )
+
+client = AzureOpenAI(
+azure_endpoint = os.getenv("AZURE_OPENAI_ENDPOINT"), 
+#api_key=os.getenv("AZURE_OPENAI_KEY"),  
+azure_ad_token_provider=token_provider,  # Use Azure AD authentication
+api_version="2024-10-21",
+)
+
 # Define a model client. You can use other model client that implements
 # the `ChatCompletionClient` interface.
 model_client = AzureOpenAIChatCompletionClient(
     model=model_deployment_name,
-    api_key=api_key,
+    # api_key=api_key,
+    azure_ad_token_provider=token_provider,
     azure_endpoint=endpoint,
     deployment_name=model_deployment_name,
     api_version="2024-10-21",  # Specify the API version if needed.
@@ -79,7 +93,8 @@ def generate_audio_response_gpt_1(text, selected_voice):
 
     audioclient = AzureOpenAI(
         azure_endpoint=os.getenv("AZURE_OPENAI_ENDPOINT"),
-        api_key=os.getenv("AZURE_OPENAI_KEY"),
+        # api_key=os.getenv("AZURE_OPENAI_KEY"),
+        azure_ad_token_provider=token_provider,
         api_version="2025-03-01-preview"
     )
 
