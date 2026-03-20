@@ -10,7 +10,9 @@ from autogen_agentchat.conditions import MaxMessageTermination, TextMentionTermi
 from autogen_agentchat.messages import BaseAgentEvent, BaseChatMessage
 from autogen_agentchat.teams import SelectorGroupChat
 from autogen_agentchat.messages import ChatMessage, TextMessage
-from autogen_agentchat.teams import DiGraphBuilder, GraphFlow
+#from autogen_agentchat.teams import DiGraphBuilder, GraphFlow
+from autogen_agentchat.teams._group_chat._graph._graph_builder import DiGraphBuilder
+from autogen_agentchat.teams import GraphFlow
 from autogen_ext.tools.mcp import McpWorkbench, StdioServerParams
 from openai import AzureOpenAI
 import os
