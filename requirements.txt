@@ -1,19 +1,19 @@
 # Core AutoGen packages - pin to a range/version known to include GraphFlow/DiGraphBuilder
-autogen-core
-autogen-agentchat       # Critical: >=0.4.9 should have the teams graph API
-autogen-ext
-autogen-ext[openai,azure,mcp]             # Your extras - keep as-is
+autogen-core==0.7.5
+autogen-agentchat==0.7.5       # Critical: >=0.4.9 should have the teams graph API
+autogen-ext==0.7.5
+autogen-ext[openai,azure,mcp]==0.7.5             # Your extras - keep as-is
 
 # Other dependencies from your original file
-openai>
+openai
 python-dotenv
 streamlit
-pydantic>=2.0,<2.12                       # Pin upper bound to avoid typing_extensions Sentinel issues
+pydantic                      # Pin upper bound to avoid typing_extensions Sentinel issues
 plotly.express
 azure-identity
 
 # Force older typing_extensions to bypass Azure stub file overriding modern versions
-typing_extensions==4.12.2                 # Or <=4.13.0 - avoids Sentinel import crash
+typing_extensions                # Or <=4.13.0 - avoids Sentinel import crash
 
 # Optional: Pin OTEL if conflicts return (from earlier errors)
 # opentelemetry-api==1.31.1
