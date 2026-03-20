@@ -13,3 +13,4 @@ azure-identity
 opentelemetry-api==1.31.1
 opentelemetry-sdk==1.31.1
 opentelemetry-semantic-conventions==0.52b1
+typing_extensions==4.12.2
