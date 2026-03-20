@@ -8,9 +8,9 @@ streamlit
 pydantic>=2.0
 plotly.express
 azure-identity
+typing_extensions==4.12.2
 
 # Force OTEL compatibility (add these lines)
 opentelemetry-api==1.31.1
 opentelemetry-sdk==1.31.1
 opentelemetry-semantic-conventions==0.52b1
-typing_extensions==4.12.2
